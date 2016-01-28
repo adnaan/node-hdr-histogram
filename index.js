@@ -2,12 +2,13 @@
  * Created by abrahamkiggundu on 28/01/2016.
  */
 
-var java = require("./javaInit");
+var java = require("./js/javaInit").getJavaInstance();
 
 var HdrHistogram = java.import('org.HdrHistogram.Histogram');
 
 module.exports = function (highestTrackableValue, numberOfSignificantValueDigits) {
     var histogram = new HdrHistogram(highestTrackableValue, numberOfSignificantValueDigits);
+    console.log(JSON.stringify(histogram));
     return {
         recordValue: function(value){
             histogram.recordValue(value);
@@ -17,6 +18,9 @@ module.exports = function (highestTrackableValue, numberOfSignificantValueDigits
         },
         outputPercentileDistribution: function(filePath, outputValueUnitScalingRatio){
             histogram.outputPercentileDistribution(filepath, outputValueUnitScalingRatio);
+        },
+        getTotalCount: function(){
+            return histogram.getTotalCountSync();
         }
     }
 };

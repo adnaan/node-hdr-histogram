@@ -4,7 +4,7 @@
   "description": "A Port of Jil Tene's HdrHistogram for use in nodejs applications",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "grunt jasmine_node"
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,16 @@
     "url": "https://github.com/kiggundu/node-hdr-histogram/issues"
   },
   "homepage": "https://github.com/kiggundu/node-hdr-histogram#readme",
+
   "dependencies":{
     "java":"*"
+  },
+
+  "devDependencies": {
+    "grunt": "0.4.4",
+    "grunt-cli": "~0.1.13",
+    "jasmine-node": "~1.14.3",
+    "grunt-jasmine-node": "~0.2.1",
+    "jasmine-before-all": "~0.1.0"
   }
 }
