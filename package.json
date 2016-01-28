@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/kiggundu/node-hdr-histogram/issues"
   },
-  "homepage": "https://github.com/kiggundu/node-hdr-histogram#readme"
+  "homepage": "https://github.com/kiggundu/node-hdr-histogram#readme",
+  "dependencies":{
+    "java":"*"
+  }
 }
