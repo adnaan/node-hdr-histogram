@@ -1,0 +1,25 @@
+{
+  "name": "node-hdr-histogram",
+  "version": "0.0.1",
+  "description": "A Port of Jil Tene's HdrHistogram for use in nodejs applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/kiggundu/node-hdr-histogram.git"
+  },
+  "keywords": [
+    "node",
+    "javascript",
+    "hdr",
+    "histogram"
+  ],
+  "author": "Abraham Kiggundu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kiggundu/node-hdr-histogram/issues"
+  },
+  "homepage": "https://github.com/kiggundu/node-hdr-histogram#readme"
+}
