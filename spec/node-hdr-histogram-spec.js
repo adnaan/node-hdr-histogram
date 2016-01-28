@@ -16,7 +16,7 @@ describe('node-hdr-histogram-spec', function () {
         it('provides the ability to log', function () {
             hdrPlugin.recordValue(2);
 
-            expect(hdrPlugin.getTotalCount()).toBeGreaterThan(0);
+            expect(hdrPlugin.getTotalCount().longValue).toBe('1');
         });
     });
 });

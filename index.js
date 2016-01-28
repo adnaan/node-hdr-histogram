@@ -8,16 +8,16 @@ var HdrHistogram = java.import('org.HdrHistogram.Histogram');
 
 module.exports = function (highestTrackableValue, numberOfSignificantValueDigits) {
     var histogram = new HdrHistogram(highestTrackableValue, numberOfSignificantValueDigits);
-    console.log(JSON.stringify(histogram));
+
     return {
         recordValue: function(value){
-            histogram.recordValue(value);
+            histogram.recordValueSync(value);
         },
         reset: function(){
-            histogram.reset()
+            histogram.resetSync()
         },
         outputPercentileDistribution: function(filePath, outputValueUnitScalingRatio){
-            histogram.outputPercentileDistribution(filepath, outputValueUnitScalingRatio);
+            histogram.outputPercentileDistributionSync(filepath, outputValueUnitScalingRatio);
         },
         getTotalCount: function(){
             return histogram.getTotalCountSync();
