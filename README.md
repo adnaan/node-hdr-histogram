@@ -11,31 +11,16 @@ here](https://github.com/joeferner/node-java/issues/90#issuecomment-45613235) fo
 
 ##Use example
 Run `npm install node-hdr-histogram`
-require('node-hdr-histogram-spec')(36000000, 2);
-describe('node-hdr-histogram-spec', function () {
-    var hdrPlugin;
 
-    beforeEach(function () {
-        hdrPlugin = require('../index.js')(java.newLong(36000000),2);
-    });
-
-    afterEach(function () {
-    });
-
-    describe('#logging', function (done) {
-        it('provides the ability to log', function () {
-            hdrPlugin.recordValue(200);
-            hdrPlugin.recordValue(125);
-            hdrPlugin.recordValue(300);
-            hdrPlugin.recordValue(456);
-            hdrPlugin.recordValue(231);
-
-            expect(hdrPlugin.getTotalCount().longValue).toBe('5');
-            hdrPlugin.outputPercentileDistribution('test.log', 1000);
-            //TODO: test that the file exists
-            hdrPlugin.reset();
-            expect(hdrPlugin.getTotalCount().longValue).toBe('0');
-
-        });
-    });
-});
+##Example nodejs code
+    //instantiate the histogram
+    var hdr = require('node-hdr-histogram-spec')(36000000, 2);
+    
+    //Record a latency value
+    hdr.recordValue(200);
+    
+    //save recordings to file
+    hdr.outputPercentileDistribution('test.log', 1000);
+    
+    //reset recording
+    hdr.reset();
