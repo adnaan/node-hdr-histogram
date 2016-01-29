@@ -7,7 +7,7 @@ describe('node-hdr-histogram-spec', function () {
     var hdrPlugin;
 
     beforeEach(function () {
-        hdrPlugin = require('../index.js')(java.newLong(36000000),2);
+        hdrPlugin = require('../index.js')(36000000,2);
     });
 
     afterEach(function () {

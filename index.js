@@ -8,7 +8,7 @@ var HdrHistogram = java.import('org.HdrHistogram.Histogram');
 var PrintStream = java.import('java.io.PrintStream');
 
 module.exports = function (highestTrackableValue, numberOfSignificantValueDigits) {
-    var histogram = new HdrHistogram(highestTrackableValue, numberOfSignificantValueDigits);
+    var histogram = new HdrHistogram(java.newLong(highestTrackableValue), numberOfSignificantValueDigits);
 
     return {
         recordValue: function(value){
