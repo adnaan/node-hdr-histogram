@@ -4,6 +4,8 @@
 "use strict";
 var fs = require("fs");
 var java = require("java");
+
+
 var baseDir = "./lib";
 var dependencies = fs.readdirSync(baseDir);
 

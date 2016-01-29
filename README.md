@@ -1,5 +1,6 @@
 # node-hdr-histogram
-A port of HDR Histogram at http://hdrhistogram.github.io/HdrHistogram for use with node
+A port of HDR Histogram at http://hdrhistogram.github.io/HdrHistogram for use with node.
+All calls into the Java layer are asynchronous by default to improve performance.
 
 ##Build
 - Ensure that JAVA_HOME is set to a JDK (not JRE) and that JDK is set up to support JNI. [see
@@ -24,3 +25,5 @@ Run `npm install hdr-histogram`
     
     //reset recording
     hdr.reset();
+
+All the above calls also return promises so that rather than fire-and-forget the caller can use the return value to determine when the call was completed

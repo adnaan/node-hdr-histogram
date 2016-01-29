@@ -25,7 +25,7 @@
 
   "dependencies":{
     "java": "~0.6.0",
-    "when-node-promisify": "~0.0.5"
+    "when": "~3.7.7"
   },
 
   "devDependencies": {
