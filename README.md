@@ -9,12 +9,12 @@ here](https://github.com/joeferner/node-java/issues/90#issuecomment-45613235) fo
 ##Test
 - Run `npm test`
 
-##Use example
-Run `npm install node-hdr-histogram`
+##To install fro npm registry
+Run `npm install hdr-histogram`
 
 ##Example nodejs code
     //instantiate the histogram
-    var hdr = require('node-hdr-histogram-spec')(36000000, 2);
+    var hdr = require('hdr-histogram')(36000000, 2);
     
     //Record a latency value
     hdr.recordValue(200);
