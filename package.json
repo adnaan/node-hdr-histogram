@@ -24,7 +24,8 @@
   "homepage": "https://github.com/kiggundu/node-hdr-histogram#readme",
 
   "dependencies":{
-    "java":"*"
+    "java": "~0.6.0",
+    "when-node-promisify": "~0.0.5"
   },
 
   "devDependencies": {
