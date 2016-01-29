@@ -5,6 +5,7 @@
 var java = require("./js/javaInit").getJavaInstance();
 
 var HdrHistogram = java.import('org.HdrHistogram.Histogram');
+var PrintStream = java.import('java.io.PrintStream');
 
 module.exports = function (highestTrackableValue, numberOfSignificantValueDigits) {
     var histogram = new HdrHistogram(highestTrackableValue, numberOfSignificantValueDigits);
@@ -17,7 +18,7 @@ module.exports = function (highestTrackableValue, numberOfSignificantValueDigits
             histogram.resetSync()
         },
         outputPercentileDistribution: function(filePath, outputValueUnitScalingRatio){
-            histogram.outputPercentileDistributionSync(filepath, outputValueUnitScalingRatio);
+            histogram.outputPercentileDistributionSync(new PrintStream(filePath), java.newDouble(outputValueUnitScalingRatio));
         },
         getTotalCount: function(){
             return histogram.getTotalCountSync();
