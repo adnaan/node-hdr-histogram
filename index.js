@@ -12,27 +12,40 @@ java.asyncOptions = {
 };
 
 var HdrHistogram = java.import('org.HdrHistogram.Histogram');
+var HdrHistogramLogWriter = java.import('org.HdrHistogram.HistogramLogWriter');
 var SingleWriterRecorder = java.import('org.HdrHistogram.SingleWriterRecorder');
 var PrintStream = java.import('java.io.PrintStream');
 
-module.exports = function (highestTrackableValue, lowestTrackableValue, numberOfSignificantValueDigits) {
+module.exports = function (highestTrackableValue, lowestTrackableValue, numberOfSignificantValueDigits, filePath) {
     var histogram = new HdrHistogram(java.newLong(highestTrackableValue), numberOfSignificantValueDigits);
     var writerRecorder = new SingleWriterRecorder(java.newLong(lowestTrackableValue), java.newLong(highestTrackableValue), numberOfSignificantValueDigits);
-    var date = new Date();
     var reportingStartTime = new Date().getTime();
+
+    var histogramLogWriter = new HdrHistogramLogWriter(new PrintStream(filePath));
 
     var getVersionString = function () {
         var pjson = require('./package.json');
         return pjson.name + ':' + pjson.version;
     };
-
     return {
         recordValue: function (value) {
-            var ret = writerRecorder.recordValueWithExpectedIntervalPromise(value, java.newLong(1.0 * 1000 * 1000)/*nanoseconds of resolution*/);
-            return ret;
+            var ret = writerRecorder.recordValuePromise(java.newLong(value));
+            return ret.then(function () {
+                var reportingEndTime = new Date().getTime();
+
+                var histogram = writerRecorder.getIntervalHistogram();
+                histogram.setStartTimeStamp(java.newLong(reportingStartTime / 1000));
+                histogram.setEndTimeStamp(java.newLong(reportingEndTime / 1000));
+                return histogramLogWriter.outputIntervalHistogram(reportingStartTime / 1000, reportingEndTime / 1000, histogram);
+            });
         },
         reset: function () {
             reportingStartTime = new Date().getMilliseconds();
+            histogramLogWriter.outputComment("[Logged with " + getVersionString() + "]");
+            histogramLogWriter.outputLogFormatVersion();
+            histogramLogWriter.outputStartTime(java.newLong(reportingStartTime / 1000));
+            histogramLogWriter.setBaseTime(java.newLong(reportingStartTime / 1000));
+            histogramLogWriter.outputLegend();
             return writerRecorder.resetPromise()
         },
         outputPercentileDistribution: function (filePath, outputValueUnitScalingRatio) {
@@ -45,14 +58,14 @@ module.exports = function (highestTrackableValue, lowestTrackableValue, numberOf
                 var reportingEndTime = new Date().getTime();
                 histogramLogWriter.outputComment("[Logged with " + getVersionString() + "]");
                 histogramLogWriter.outputLogFormatVersion();
-                histogramLogWriter.outputStartTime(java.newLong(reportingStartTime/1000));
-                histogramLogWriter.setBaseTime(java.newLong(reportingStartTime));
+                histogramLogWriter.outputStartTime(java.newLong(reportingStartTime / 1000));
+                histogramLogWriter.setBaseTime(java.newLong(reportingStartTime / 1000));
                 histogramLogWriter.outputLegend();
 
                 var histogram = writerRecorder.getIntervalHistogram();
-                histogram.setStartTimeStamp(java.newLong(reportingStartTime));
-                histogram.setEndTimeStamp(java.newLong(reportingEndTime));
-                return histogramLogWriter.outputIntervalHistogram(reportingStartTime/1000, reportingEndTime/1000, histogram);
+                histogram.setStartTimeStamp(java.newLong(reportingStartTime / 1000));
+                histogram.setEndTimeStamp(java.newLong(reportingEndTime / 1000));
+                return histogramLogWriter.outputIntervalHistogram(reportingStartTime / 1000, reportingEndTime / 1000, histogram);
 
             });
 
