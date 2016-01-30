@@ -7,7 +7,7 @@ describe('node-hdr-histogram-spec', function () {
     var hdrPlugin;
 
     beforeEach(function () {
-        hdrPlugin = require('../index.js')(2000000, 1, 5, 'example.histogram.hlog');
+        hdrPlugin = require('../index.js')(1000000, 1, 5, 'example.histogram.hlog');
     });
 
     afterEach(function () {
@@ -38,7 +38,7 @@ describe('node-hdr-histogram-spec', function () {
             }
             else {
                 setTimeout(function () {
-                    hdrPlugin.recordValue(10.5);
+                    hdrPlugin.recordValue(999999);
                     done();
                 }, 1000);
             }
