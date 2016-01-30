@@ -31,13 +31,15 @@ Run `npm install hdr-histogram`
     
     
 ##To view the recorded results
-use the [Visualizer](https://github.com/ennerf/HdrHistogramVisualizer) to load the produced file and view your intervals and performance trends
+use the [Visualizer](https://github.com/ennerf/HdrHistogramVisualizer) to load the produced file.
+THis allows you to view the max-per-interval plot and the percentile plot without futher processing the log file.
 
-##To generate and view interactive percentile data
-Use the [Histogram log processor](https://github.com/HdrHistogram/HdrHistogram/blob/master/HistogramLogProcessor) script as below
+##To generate and view percentile data
+Run the following script to process the histogram logs above and produce a percentile series log file
     
     `./HistogramLogProcessor -i <log file outputted above> -o processedLogs`
-Then open *'processedLogs.hgrm'* file generated with the online [Dynamic Histogram Plotter](http://hdrhistogram.github.io/HdrHistogram/plotFiles.html) tool to dynamically show your percentiles
+
+A **'processedLogs.hgrm'** file is generated. This can be ploted in excell or opened with the online [Dynamic Histogram Plotter](http://hdrhistogram.github.io/HdrHistogram/plotFiles.html) tool which dynamically show your percentiles
 
 enjoy.
 
