@@ -7,7 +7,7 @@ describe('node-hdr-histogram-spec', function () {
     var hdrPlugin;
 
     beforeEach(function () {
-        hdrPlugin = require('../index.js')(36000000, 2);
+        hdrPlugin = require('../index.js')(36000, 1, 3);
     });
 
     afterEach(function () {
@@ -23,6 +23,18 @@ describe('node-hdr-histogram-spec', function () {
                     });
                 }));
         });
+
+        it('save some random values into log files', function(done){
+            for(var i=0; i<300000; i++) {
+                hdrPlugin.recordValue(Math.floor(Math.random()*2000));
+            }
+
+            hdrPlugin.outputPercentileDistribution('example.percentile.log', 10000).then(function(){
+                hdrPlugin.outputIntervalHistogram('example.histogram.hlog').then(done);
+            });
+
+        })
+
 
         function confirmLogsInList(num, done) {
             hdrPlugin.getTotalCount()
