@@ -10,20 +10,26 @@ here](https://github.com/joeferner/node-java/issues/90#issuecomment-45613235) fo
 ##Test
 - Run `npm test`
 
-##To install fro npm registry
+##To install from npm registry
 Run `npm install hdr-histogram`
 
 ##Example nodejs code
-    //instantiate the histogram
-    var hdr = require('hdr-histogram')(36000000, 2);
+    //instantiate the hdr-histogram module with
+    //- max value you expect to record
+    //- min value you expect to record (must be greater than 1 so scale your recorded values appropriately)
+    //- significant digits to record (precision)
+    //- the log file to write to
+    var hdr = require('hdr-histogram')(2000000, 1, 5, 'example.histogram.hlog');
     
     //Record a latency value
-    hdr.recordValue(200);
+    hdr.recordValue(200); //this
     
-    //save recordings to file
-    hdr.outputPercentileDistribution('test.log', 1000);
-    
-    //reset recording
+    //reset the recording process
     hdr.reset();
 
-All the above calls also return promises so that rather than fire-and-forget the caller can use the return value to determine when the call was completed
+    All the above calls also return promises so that rather than fire-and-forget the caller can use the return value to determine when the call was completed
+    
+    
+##To view the recorded results
+use the [Visualizer](https://github.com/ennerf/HdrHistogramVisualizer) to load the produced file and view your performance trends
+

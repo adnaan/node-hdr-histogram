@@ -17,25 +17,27 @@ describe('node-hdr-histogram-spec', function () {
         it('provides the ability to log', function (done) {
             hdrPlugin.recordValue(200)
                 .then(confirmLogsInList.bind({}, '0', function () {
-                        //TODO: test that the file exists
+                    //TODO: test that the file exists
                     hdrPlugin.reset().then(confirmLogsInList.bind({}, '0', done));
                 }));
         });
 
-        it('save some random values into log files', function(done){
-            recordAValue(15, hdrPlugin, done);
+        it('save some random values into log files', function (done) {
+            hdrPlugin.reset().then(function () {
+                recordAValue(15, hdrPlugin, done);
+            });
         }, 30000);
 
-        function recordAValue(valueIndex, hdrPlugin, done){
-            if(valueIndex>0){
-                setTimeout(function(){
-                    var value = Math.floor(Math.random()*1000*1000);
+        function recordAValue(valueIndex, hdrPlugin, done) {
+            if (valueIndex > 0) {
+                setTimeout(function () {
+                    var value = Math.floor(Math.random() * 1000 * 1000);
                     hdrPlugin.recordValue(value);
                     recordAValue(--valueIndex, hdrPlugin, done);
-                }, Math.random()*1000);
+                }, Math.random() * 1000);
             }
-            else{
-                setTimeout(function(){
+            else {
+                setTimeout(function () {
                     hdrPlugin.recordValue(10.5);
                     done();
                 }, 1000);
