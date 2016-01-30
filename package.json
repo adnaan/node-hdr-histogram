@@ -1,6 +1,6 @@
 {
   "name": "hdr-histogram",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A Port of Jil Tene's HdrHistogram for use in nodejs applications",
   "main": "index.js",
   "scripts": {
@@ -22,12 +22,10 @@
     "url": "https://github.com/kiggundu/node-hdr-histogram/issues"
   },
   "homepage": "https://github.com/kiggundu/node-hdr-histogram#readme",
-
-  "dependencies":{
+  "dependencies": {
     "java": "~0.6.0",
     "when": "~3.7.7"
   },
-
   "devDependencies": {
     "grunt": "0.4.4",
     "grunt-cli": "~0.1.13",
