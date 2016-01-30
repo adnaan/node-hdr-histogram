@@ -18,8 +18,8 @@ var PrintStream = java.import('java.io.PrintStream');
 module.exports = function (highestTrackableValue, lowestTrackableValue, numberOfSignificantValueDigits) {
     var histogram = new HdrHistogram(java.newLong(highestTrackableValue), numberOfSignificantValueDigits);
     var writerRecorder = new SingleWriterRecorder(java.newLong(lowestTrackableValue), java.newLong(highestTrackableValue), numberOfSignificantValueDigits);
-    var reportingStartTime = new Date().getMilliseconds();
-    var startTimeSecs = new Date().getSeconds();
+    var date = new Date();
+    var reportingStartTime = new Date().getTime();
 
     var getVersionString = function () {
         var pjson = require('./package.json');
@@ -42,15 +42,17 @@ module.exports = function (highestTrackableValue, lowestTrackableValue, numberOf
         },
         outputIntervalHistogram: function (filePath) {
             var ret = java.newInstancePromise('org.HdrHistogram.HistogramLogWriter', new PrintStream(filePath)).then(function (histogramLogWriter) {
-                var endTimeSecs = new Date().getSeconds();
+                var reportingEndTime = new Date().getTime();
                 histogramLogWriter.outputComment("[Logged with " + getVersionString() + "]");
                 histogramLogWriter.outputLogFormatVersion();
-                histogramLogWriter.outputStartTime(reportingStartTime);
-                histogramLogWriter.setBaseTime(reportingStartTime);
+                histogramLogWriter.outputStartTime(java.newLong(reportingStartTime/1000));
+                histogramLogWriter.setBaseTime(java.newLong(reportingStartTime));
                 histogramLogWriter.outputLegend();
 
                 var histogram = writerRecorder.getIntervalHistogram();
-                return histogramLogWriter.outputIntervalHistogram(startTimeSecs, endTimeSecs, histogram);
+                histogram.setStartTimeStamp(java.newLong(reportingStartTime));
+                histogram.setEndTimeStamp(java.newLong(reportingEndTime));
+                return histogramLogWriter.outputIntervalHistogram(reportingStartTime/1000, reportingEndTime/1000, histogram);
 
             });
 
