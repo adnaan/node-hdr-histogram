@@ -12,8 +12,10 @@
   },
   "keywords": [
     "node",
+    "nodejs",
     "javascript",
     "hdr",
+    "performance",
     "histogram"
   ],
   "author": "Abraham Kiggundu",

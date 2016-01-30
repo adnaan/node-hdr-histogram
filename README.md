@@ -3,9 +3,17 @@ A port of HDR Histogram at http://hdrhistogram.github.io/HdrHistogram for use wi
 All calls into the Java layer are asynchronous by default to improve performance.
 
 ##Build
-- Ensure that JAVA_HOME is set to a JDK (not JRE) and that JDK is set up to support JNI. [see
-here](https://github.com/joeferner/node-java/issues/90#issuecomment-45613235) for details
-- Run `npm install`
+Run `npm install`
+####Solving known OSX java/jni build issues wrt the java node module
+Ensure that JAVA_HOME is set to a JDK (not JRE)
+ 
+e.g. `export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_25.jdk/Contents/Home`
+
+and that the JDK is set up to support JNI (off by default on OSX), 
+
+i.e open `$JAVA_HOME/../Info.plist` and add `JNI` to the `JVMCapabilities` array. 
+
+[see here](https://github.com/joeferner/node-java/issues/90#issuecomment-45613235) for details
 
 ##Test
 - Run `npm test`
