@@ -1,6 +1,6 @@
 {
   "name": "hdr-histogram",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A Port of Jil Tene's HdrHistogram for use in nodejs applications",
   "main": "index.js",
   "scripts": {
