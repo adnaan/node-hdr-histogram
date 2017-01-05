@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/kiggundu/node-hdr-histogram#readme",
   "dependencies": {
+    "bytebuffer": "^5.0.1",
     "java": "~0.6.0",
     "when": "~3.7.7"
   },
@@ -34,5 +35,19 @@
     "jasmine-node": "~1.14.3",
     "grunt-jasmine-node": "~0.2.1",
     "jasmine-before-all": "~0.1.0"
+  },
+  "java": {
+    "dependencies": [
+      {
+        "groupId": "com.google.protobuf",
+        "artifactId": "protobuf-java",
+        "version": "3.1.0"
+      },
+      {
+        "groupId": "com.google.protobuf",
+        "artifactId": "protobuf-java-util",
+        "version": "3.1.0"
+      }
+    ]
   }
 }

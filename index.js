@@ -4,57 +4,48 @@
 
 var java = require("./js/javaInit").getJavaInstance();
 
-java.asyncOptions = {
-    asyncSuffix: undefined,     // Don't generate node-style methods taking callbacks
-    syncSuffix: "",              // Sync methods use the base name(!!)
-    promiseSuffix: "Promise",   // Generate methods returning promises, using the suffix Promise.
-    promisify: require('when/node').lift
-};
 
-var HdrHistogramLogWriter = java.import('org.HdrHistogram.HistogramLogWriter');
 var SingleWriterRecorder = java.import('org.HdrHistogram.SingleWriterRecorder');
-var PrintStream = java.import('java.io.PrintStream');
+var ByteBuffer = java.import('java.nio.ByteBuffer');
+var ByteString = java.import("com.google.protobuf.ByteString");
+var JSByteBuffer = require("bytebuffer");
 
-module.exports = function (highestTrackableValue, lowestTrackableValue, numberOfSignificantValueDigits, filePath) {
+var buf = null;
+
+var getByteBuffer =  function(capacity){
+    if (buf == null || buf.capacitySync() < capacity) {
+        buf = ByteBuffer.allocateSync(capacity);
+    }         
+    return buf;
+}
+
+module.exports = function (lowestTrackableValue, highestTrackableValue, numberOfSignificantValueDigits) {
     var writerRecorder = new SingleWriterRecorder(java.newLong(lowestTrackableValue), java.newLong(highestTrackableValue), numberOfSignificantValueDigits);
-    var reportingStartTime = new Date().getTime();
 
-    var histogramLogWriter = new HdrHistogramLogWriter(new PrintStream(filePath));
-
-    var getVersionString = function () {
-        var pjson = require('./package.json');
-        return pjson.name + ':' + pjson.version;
-    };
     return {
-        recordValue: function (value) {
-            var ret = writerRecorder.recordValuePromise(java.newLong(value));
-            return ret.then(function () {
-                var reportingEndTime = new Date().getTime();
-
-                var histogram = writerRecorder.getIntervalHistogram();
-                histogram.setStartTimeStamp(java.newLong(reportingStartTime / 1000));
-                histogram.setEndTimeStamp(java.newLong(reportingEndTime / 1000));
-                return histogramLogWriter.outputIntervalHistogram(reportingStartTime / 1000, reportingEndTime / 1000, histogram);
-            });
+        recordValue: function (value) {    
+           return writerRecorder.recordValue(java.newLong(value));
         },
         reset: function () {
-            reportingStartTime = new Date().getMilliseconds();
-            histogramLogWriter.outputComment("[Logged with " + getVersionString() + "]");
-            histogramLogWriter.outputLogFormatVersion();
-            histogramLogWriter.outputStartTime(java.newLong(reportingStartTime / 1000));
-            histogramLogWriter.setBaseTime(java.newLong(reportingStartTime / 1000));
-            histogramLogWriter.outputLegend();
-            return writerRecorder.resetPromise()
+            return writerRecorder.reset()
         },
         /**
          * Likely inefficient method if called multiple times. Initially only intended to facilitate tests
          * @returns {*}
          */
         getTotalCount: function () {
-            var ret = writerRecorder.getIntervalHistogramPromise().then(function (histogram) {
-                return histogram.getTotalCountPromise();
-            });
-            return ret;
+            var histogram = writerRecorder.getIntervalHistogramSync();
+            console.log(histogram);
+            return histogram.getTotalCountSync();
+        },
+
+        encode: function () {
+            var histogram = writerRecorder.getIntervalHistogramSync()
+            var buffer = getByteBuffer(histogram.getNeededByteBufferCapacitySync());
+            buffer.clearSync();
+            histogram.encodeIntoByteBufferSync(buffer);
+            buffer.flip();
+            return Buffer.from(buffer.arraySync())
         }
     }
 }
